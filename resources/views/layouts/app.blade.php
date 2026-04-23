@@ -44,7 +44,7 @@
                                 <span>Appointments</span>
                             </a>
                             <a href="{{ route('patients.index') }}" class="flex items-center gap-2 rounded-xl px-3 py-2 font-medium transition {{ request()->routeIs('patients.*') ? 'bg-[#e7f0ff] text-[#2463eb]' : 'text-[#4a5f7d] hover:bg-[#eef4ff]' }}">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M15 7.5a3 3 0 11-6 0 3 3 0 016 0Zm-9 11.25a6 6 0 0118 0V20H6v-1.25Zm10.5-6.75h3m-1.5-1.5v3" /></svg>
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M15 7a3 3 0 11-6 0 3 3 0 016 0Zm-9 11a6 6 0 1112 0H6Z" /></svg>
                                 <span>Patients</span>
                             </a>
                         @endif
