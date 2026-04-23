@@ -84,7 +84,7 @@
 </head>
 <body>
     <h1>Clinic Management Report</h1>
-    <p class="sub">{{ \\Illuminate\\Support\\Str::title($tab === 'patients' ? 'patient analytics' : str_replace('_', ' ', $tab)) }}</p>
+    <p class="sub">{{ \Illuminate\Support\Str::title($tab === 'patients' ? 'patient analytics' : str_replace('_', ' ', $tab)) }}</p>
 
     <div class="meta">
         <strong>Date Range:</strong> {{ $startDate->toDateString() }} to {{ $endDate->toDateString() }}<br>
@@ -221,7 +221,7 @@
             <tbody>
                 @foreach ($appointmentAnalytics['statusCards'] as $status => $data)
                     <tr>
-                        <td>{{ \\Illuminate\\Support\\Str::title($status) }}</td>
+                        <td>{{ \Illuminate\Support\Str::title($status) }}</td>
                         <td>{{ $data['count'] }}</td>
                         <td>{{ $data['percent'] }}%</td>
                     </tr>
@@ -275,7 +275,7 @@
                     <tr>
                         <td>{{ $user->name }}</td>
                         <td>{{ $user->email }}</td>
-                        <td>{{ \\Illuminate\\Support\\Str::title($user->role) }}</td>
+                        <td>{{ \Illuminate\Support\Str::title($user->role) }}</td>
                         <td>{{ $user->is_active ? 'active' : 'inactive' }}</td>
                         <td>{{ optional($user->updated_at)->toDateString() }}</td>
                     </tr>
