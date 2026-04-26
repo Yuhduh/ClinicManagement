@@ -23,7 +23,7 @@ class DashboardController extends Controller
         ];
 
         if ($user->role === 'admin') {
-            $roleStats = [
+           $roleStats = [
                 'total_staff' => User::whereIn('role', ['doctor', 'receptionist'])->count(),
                 'active_staff' => User::whereIn('role', ['doctor', 'receptionist'])->where('is_active', true)->count(),
             ];
