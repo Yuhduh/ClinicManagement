@@ -89,13 +89,7 @@
 
             <main class="ml-64 min-h-screen bg-[#f3f6fb]">
                 <div class="border-b border-[#dbe3ee] bg-[#f8fbff] px-6 py-3">
-                    <div class="flex items-center justify-between gap-4">
-                        <label class="relative block w-full max-w-[720px]">
-                            <span class="pointer-events-none absolute inset-y-0 left-3 flex items-center text-[#8aa0bf]">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M21 21l-4.3-4.3m1.8-5.2a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
-                            </span>
-                            <input type="text" placeholder="{{ auth()->user()->role === 'admin' ? 'Search users...' : 'Search patients, appointments...' }}" class="w-full rounded-xl border border-[#d7deea] bg-white py-2 pl-10 pr-3 text-sm text-[#334155] placeholder:text-[#94a3b8] focus:border-[#8fb4ff] focus:ring-2 focus:ring-[#d9e7ff]" />
-                        </label>
+                    <div class="flex items-center justify-end gap-4">
                         <p class="text-sm text-[#4e6483]">{{ now()->format('l, F j, Y') }}</p>
                     </div>
                 </div>

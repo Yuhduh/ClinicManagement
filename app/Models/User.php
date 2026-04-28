@@ -33,23 +33,23 @@ class User extends Authenticatable
     }
 
     /**
-     * Get the user's display name in format: Last Name, First Name Middle Initial
+     * Get the user's display name with a role-based prefix.
      */
     public function getDisplayNameAttribute(): string
     {
-        $parts = [];
+        $prefix = match ($this->role) {
+            'doctor' => 'Dr.',
+            'receptionist' => 'Recep.',
+            'admin' => 'Admin',
+            default => null,
+        };
 
-        if ($this->last_name) {
-            $parts[] = $this->last_name;
-        }
-
-        if ($this->first_name) {
-            $parts[] = $this->first_name;
-        }
-
-        if ($this->middle_initial) {
-            $parts[] = $this->middle_initial;
-        }
+        $parts = array_filter([
+            $prefix,
+            $this->first_name,
+            $this->middle_initial,
+            $this->last_name,
+        ]);
 
         return implode(' ', $parts) ?: 'N/A';
     }
