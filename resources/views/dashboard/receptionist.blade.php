@@ -73,7 +73,7 @@
                 <select name="doctor_id" class="rounded-xl border-slate-200 text-sm focus:border-blue-400 focus:ring-blue-400">
                     <option value="">Select doctor</option>
                     @foreach ($doctors as $doctor)
-                        <option value="{{ $doctor->id }}" @selected(old('doctor_id', $editingAppointment?->doctor_id) == $doctor->id)>{{ $doctor->name }}</option>
+                        <option value="{{ $doctor->id }}" @selected(old('doctor_id', $editingAppointment?->doctor_id) == $doctor->id)>{{ $doctor->display_name }}</option>
                     @endforeach
                 </select>
                 <input type="datetime-local" name="scheduled_at" value="{{ old('scheduled_at', $editingAppointment?->scheduled_at?->format('Y-m-d\TH:i')) }}" class="rounded-xl border-slate-200 text-sm focus:border-blue-400 focus:ring-blue-400" />
@@ -110,17 +110,32 @@
                         <tr>
                             <td class="px-4 py-3 text-slate-900">{{ $appointment->patient->full_name }}</td>
                             <td class="px-4 py-3 text-slate-600">{{ $appointment->scheduled_at->format('M d, Y · h:i A') }}</td>
-                            <td class="px-4 py-3 text-slate-600">{{ $appointment->doctor->name }}</td>
+                            <td class="px-4 py-3 text-slate-600">{{ $appointment->doctor->display_name }}</td>
                             <td class="px-4 py-3">
                                 <div class="flex items-center justify-between gap-3">
                                     <span class="rounded-full px-2 py-1 text-xs font-medium {{ $appointment->status === 'confirmed' ? 'bg-emerald-100 text-emerald-700' : ($appointment->status === 'pending' ? 'bg-amber-100 text-amber-700' : 'bg-rose-100 text-rose-700') }}">{{ ucfirst($appointment->status) }}</span>
                                     <div class="flex items-center gap-2 text-sm">
                                         <a href="{{ route('receptionist.appointments', ['edit_appointment' => $appointment->id]) }}" class="text-blue-600 hover:text-blue-700">Edit</a>
-                                        <form method="POST" action="{{ route('receptionist.appointments.destroy', $appointment) }}" onsubmit="return confirm('Delete this appointment?')">
+                                        <button 
+                                            type="button"
+                                            data-confirm-delete 
+                                            data-confirm-modal="delete-reception-appointment-{{ $appointment->id }}"
+                                            data-confirm-message="Are you sure you want to delete this appointment? This action cannot be undone."
+                                            class="text-rose-600 hover:text-rose-700"
+                                        >
+                                            Delete
+                                        </button>
+                                        <form id="delete-form-{{ $appointment->id }}" method="POST" action="{{ route('receptionist.appointments.destroy', $appointment) }}" class="hidden">
                                             @csrf
                                             @method('DELETE')
-                                            <button type="submit" class="text-rose-600 hover:text-rose-700">Delete</button>
                                         </form>
+                                        <x-confirm-modal 
+                                            :id="'delete-reception-appointment-' . $appointment->id"
+                                            title="Delete Appointment"
+                                            message="Are you sure you want to delete this appointment? This action cannot be undone."
+                                            confirmText="Delete"
+                                            cancelText="Cancel"
+                                        />
                                     </div>
                                 </div>
                             </td>
@@ -187,11 +202,26 @@
                             <td class="px-4 py-3 text-slate-600">
                                 <div class="flex items-center gap-2 text-sm">
                                     <a href="{{ route('receptionist.patients', ['edit_patient' => $patient->id]) }}" class="text-blue-600 hover:text-blue-700">Edit</a>
-                                    <form method="POST" action="{{ route('receptionist.patients.destroy', $patient) }}" onsubmit="return confirm('Delete this patient?')">
+                                    <button 
+                                        type="button"
+                                        data-confirm-delete 
+                                        data-confirm-modal="delete-patient-{{ $patient->id }}"
+                                        data-confirm-message="Are you sure you want to delete this patient? This action cannot be undone."
+                                        class="text-rose-600 hover:text-rose-700"
+                                    >
+                                        Delete
+                                    </button>
+                                    <form id="delete-form-{{ $patient->id }}" method="POST" action="{{ route('receptionist.patients.destroy', $patient) }}" class="hidden">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="submit" class="text-rose-600 hover:text-rose-700">Delete</button>
                                     </form>
+                                    <x-confirm-modal 
+                                        :id="'delete-patient-' . $patient->id"
+                                        title="Delete Patient"
+                                        message="Are you sure you want to delete this patient? This action cannot be undone."
+                                        confirmText="Delete"
+                                        cancelText="Cancel"
+                                    />
                                 </div>
                             </td>
                         </tr>

@@ -42,7 +42,9 @@
             @endif
 
             <div class="grid gap-3 md:grid-cols-2 lg:grid-cols-3">
-                <input type="text" name="name" value="{{ old('name', $editingUser?->name) }}" placeholder="Full name" class="rounded-xl border-slate-200 text-sm focus:border-blue-400 focus:ring-blue-400" />
+                <input type="text" name="first_name" value="{{ old('first_name', $editingUser?->first_name) }}" placeholder="First Name" class="rounded-xl border-slate-200 text-sm focus:border-blue-400 focus:ring-blue-400" />
+                <input type="text" name="last_name" value="{{ old('last_name', $editingUser?->last_name) }}" placeholder="Last Name" class="rounded-xl border-slate-200 text-sm focus:border-blue-400 focus:ring-blue-400" />
+                <input type="text" name="middle_initial" value="{{ old('middle_initial', $editingUser?->middle_initial) }}" placeholder="Middle Initial" class="rounded-xl border-slate-200 text-sm focus:border-blue-400 focus:ring-blue-400" />
                 <input type="email" name="email" value="{{ old('email', $editingUser?->email) }}" placeholder="Email" class="rounded-xl border-slate-200 text-sm focus:border-blue-400 focus:ring-blue-400" />
                 <select name="role" class="rounded-xl border-slate-200 text-sm focus:border-blue-400 focus:ring-blue-400">
                     @foreach (['admin', 'doctor', 'receptionist'] as $role)
@@ -78,7 +80,7 @@
                 <tbody class="divide-y divide-slate-200 bg-white">
                     @forelse ($users as $user)
                         <tr>
-                            <td class="px-4 py-3 text-slate-900">{{ $user->name }}</td>
+                            <td class="px-4 py-3 text-slate-900">{{ $user->display_name }}</td>
                             <td class="px-4 py-3 text-slate-600">{{ $user->email }}</td>
                             <td class="px-4 py-3">
                                 <div class="flex items-center gap-2">
@@ -90,11 +92,26 @@
                             <td class="px-4 py-3 text-slate-600">
                                 <div class="flex items-center gap-2 text-sm">
                                     <a href="{{ route('admin.users', ['edit_user' => $user->id]) }}" class="text-blue-600 hover:text-blue-700">Edit</a>
-                                    <form method="POST" action="{{ route('admin.users.destroy', $user) }}" onsubmit="return confirm('Delete this user?')">
+                                    <button 
+                                        type="button"
+                                        data-confirm-delete 
+                                        data-confirm-modal="delete-admin-user-{{ $user->id }}"
+                                        data-confirm-message="Are you sure you want to delete {{ $user->display_name }}? This action cannot be undone."
+                                        class="text-rose-600 hover:text-rose-700"
+                                    >
+                                        Delete
+                                    </button>
+                                    <form id="delete-form-{{ $user->id }}" method="POST" action="{{ route('admin.users.destroy', $user) }}" class="hidden">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="submit" class="text-rose-600 hover:text-rose-700">Delete</button>
                                     </form>
+                                    <x-confirm-modal 
+                                        :id="'delete-admin-user-' . $user->id"
+                                        title="Delete User"
+                                        :message="'Are you sure you want to delete ' . $user->display_name . '? This action cannot be undone.'"
+                                        confirmText="Delete"
+                                        cancelText="Cancel"
+                                    />
                                 </div>
                             </td>
                         </tr>

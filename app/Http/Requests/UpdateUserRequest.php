@@ -19,7 +19,9 @@ class UpdateUserRequest extends FormRequest
         $targetUser = $this->route('user');
 
         return [
-            'name' => ['required', 'string', 'max:255'],
+            'first_name' => ['required', 'string', 'max:255'],
+            'last_name' => ['required', 'string', 'max:255'],
+            'middle_initial' => ['nullable', 'string', 'max:5'],
             'email' => ['required', 'email', 'max:255', Rule::unique('users', 'email')->ignore($targetUser->id)],
             'role' => ['required', Rule::in(['admin', 'doctor', 'receptionist'])],
             'is_active' => ['required', 'boolean'],

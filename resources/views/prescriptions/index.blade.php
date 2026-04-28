@@ -15,7 +15,7 @@
                     <div class="flex items-start justify-between">
                         <div>
                             <h2 class="text-lg font-semibold text-slate-900">{{ $prescription->patient->first_name }} {{ $prescription->patient->last_name }}</h2>
-                            <p class="text-sm text-slate-500">Prescribed by {{ $prescription->doctor->name }}</p>
+                            <p class="text-sm text-slate-500">Prescribed by {{ $prescription->doctor->display_name }}</p>
                         </div>
                         <div class="text-right">
                             <p class="text-xs text-slate-500 uppercase tracking-wide">Prescription ID</p>
@@ -76,13 +76,26 @@
                         <a href="{{ route('prescriptions.edit', $prescription) }}" class="flex-1 rounded-lg bg-[#2463eb] px-3 py-2 text-center text-sm font-medium text-white hover:bg-[#1f54c9]">
                             Edit
                         </a>
-                        <form method="POST" action="{{ route('prescriptions.destroy', $prescription) }}" class="flex-1" onsubmit="return confirm('Are you sure?')">
+                        <button
+                            type="button"
+                            data-confirm-delete
+                            data-confirm-modal="delete-prescription-{{ $prescription->id }}"
+                            data-confirm-message="Are you sure you want to delete this prescription? This action cannot be undone."
+                            class="flex-1 rounded-lg border border-[#e5e9f1] px-3 py-2 text-center text-sm font-medium text-slate-600 hover:bg-[#f8fbff]"
+                        >
+                            Delete
+                        </button>
+                        <form id="delete-form-{{ $prescription->id }}" method="POST" action="{{ route('prescriptions.destroy', $prescription) }}" class="hidden">
                             @csrf
                             @method('DELETE')
-                            <button type="submit" class="w-full rounded-lg border border-[#e5e9f1] px-3 py-2 text-center text-sm font-medium text-slate-600 hover:bg-[#f8fbff]">
-                                Delete
-                            </button>
                         </form>
+                        <x-confirm-modal 
+                            :id="'delete-prescription-' . $prescription->id"
+                            title="Delete Prescription"
+                            message="Are you sure you want to delete this prescription? This action cannot be undone."
+                            confirmText="Delete"
+                            cancelText="Cancel"
+                        />
                     </div>
                 </div>
             @empty

@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
-#[Fillable(['name', 'email', 'password', 'role', 'is_active'])]
+#[Fillable(['first_name', 'last_name', 'middle_initial', 'email', 'password', 'role', 'is_active'])]
 #[Hidden(['password', 'remember_token'])]
 class User extends Authenticatable
 {
@@ -30,6 +30,28 @@ class User extends Authenticatable
             'password' => 'hashed',
             'is_active' => 'boolean',
         ];
+    }
+
+    /**
+     * Get the user's display name in format: Last Name, First Name Middle Initial
+     */
+    public function getDisplayNameAttribute(): string
+    {
+        $parts = [];
+
+        if ($this->last_name) {
+            $parts[] = $this->last_name;
+        }
+
+        if ($this->first_name) {
+            $parts[] = $this->first_name;
+        }
+
+        if ($this->middle_initial) {
+            $parts[] = $this->middle_initial;
+        }
+
+        return implode(' ', $parts) ?: 'N/A';
     }
 
     public function getRedirectRoute(): string

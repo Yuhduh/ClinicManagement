@@ -273,7 +273,7 @@
             <tbody>
                 @foreach ($activityRows as $user)
                     <tr>
-                        <td>{{ $user->name }}</td>
+                        <td>{{ $user->display_name }}</td>
                         <td>{{ $user->email }}</td>
                         <td>{{ \Illuminate\Support\Str::title($user->role) }}</td>
                         <td>{{ $user->is_active ? 'active' : 'inactive' }}</td>

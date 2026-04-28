@@ -65,7 +65,7 @@
                         </div>
                         <div class="mt-2 flex items-center justify-between gap-3">
                             <p class="text-sm text-slate-500">{{ $appointment->scheduled_at->format('h:i A') }} · {{ $appointment->type }}</p>
-                            <p class="text-sm text-slate-500">Dr. {{ $appointment->doctor->name }}</p>
+                            <p class="text-sm text-slate-500">Dr. {{ $appointment->doctor->display_name }}</p>
                         </div>
                     </div>
                 @empty
@@ -133,11 +133,26 @@
                                     <span>{{ $prescription->frequency }}</span>
                                     <div class="flex items-center gap-2 text-sm">
                                         <a href="{{ route('doctor.prescriptions', ['edit_prescription' => $prescription->id]) }}" class="text-blue-600 hover:text-blue-700">Edit</a>
-                                        <form method="POST" action="{{ route('doctor.prescriptions.destroy', $prescription) }}" onsubmit="return confirm('Delete this prescription?')">
+                                        <button 
+                                            type="button"
+                                            data-confirm-delete 
+                                            data-confirm-modal="delete-doctor-prescription-{{ $prescription->id }}"
+                                            data-confirm-message="Are you sure you want to delete this prescription? This action cannot be undone."
+                                            class="text-rose-600 hover:text-rose-700"
+                                        >
+                                            Delete
+                                        </button>
+                                        <form id="delete-form-{{ $prescription->id }}" method="POST" action="{{ route('doctor.prescriptions.destroy', $prescription) }}" class="hidden">
                                             @csrf
                                             @method('DELETE')
-                                            <button type="submit" class="text-rose-600 hover:text-rose-700">Delete</button>
                                         </form>
+                                        <x-confirm-modal 
+                                            :id="'delete-doctor-prescription-' . $prescription->id"
+                                            title="Delete Prescription"
+                                            message="Are you sure you want to delete this prescription? This action cannot be undone."
+                                            confirmText="Delete"
+                                            cancelText="Cancel"
+                                        />
                                     </div>
                                 </div>
                             </td>
@@ -198,11 +213,26 @@
                         <p class="font-medium text-slate-900">{{ $record->visit_date->format('F d, Y') }} · {{ $record->patient->full_name }}</p>
                         <div class="flex items-center gap-2 text-sm">
                             <a href="{{ route('doctor.records', ['edit_record' => $record->id]) }}" class="text-blue-600 hover:text-blue-700">Edit</a>
-                            <form method="POST" action="{{ route('doctor.records.destroy', $record) }}" onsubmit="return confirm('Delete this record?')">
+                            <button 
+                                type="button"
+                                data-confirm-delete 
+                                data-confirm-modal="delete-record-{{ $record->id }}"
+                                data-confirm-message="Are you sure you want to delete this medical record? This action cannot be undone."
+                                class="text-rose-600 hover:text-rose-700"
+                            >
+                                Delete
+                            </button>
+                            <form id="delete-form-{{ $record->id }}" method="POST" action="{{ route('doctor.records.destroy', $record) }}" class="hidden">
                                 @csrf
                                 @method('DELETE')
-                                <button type="submit" class="text-rose-600 hover:text-rose-700">Delete</button>
                             </form>
+                            <x-confirm-modal 
+                                :id="'delete-record-' . $record->id"
+                                title="Delete Record"
+                                message="Are you sure you want to delete this medical record? This action cannot be undone."
+                                confirmText="Delete"
+                                cancelText="Cancel"
+                            />
                         </div>
                     </div>
                     <p class="text-sm text-slate-600">{{ $record->diagnosis ?: 'No diagnosis entered yet.' }}</p>

@@ -23,7 +23,8 @@ class DatabaseSeeder extends Seeder
         $admin = User::updateOrCreate(
             ['email' => 'admin@clinic.com'],
             [
-            'name' => 'Admin User',
+            'first_name' => 'Admin',
+            'last_name' => 'User',
             'role' => 'admin',
             'is_active' => true,
             ]
@@ -32,7 +33,9 @@ class DatabaseSeeder extends Seeder
         $doctorSarah = User::updateOrCreate(
             ['email' => 'doctor@clinic.com'],
             [
-            'name' => 'Dr. Sarah Chen',
+            'first_name' => 'Sarah',
+            'last_name' => 'Chen',
+            'middle_initial' => 'Dr.',
             'role' => 'doctor',
             'is_active' => true,
             ]
@@ -41,7 +44,9 @@ class DatabaseSeeder extends Seeder
         $doctorRobert = User::updateOrCreate(
             ['email' => 'doctor2@clinic.com'],
             [
-            'name' => 'Dr. Robert Martinez',
+            'first_name' => 'Robert',
+            'last_name' => 'Martinez',
+            'middle_initial' => 'Dr.',
             'role' => 'doctor',
             'is_active' => true,
             ]
@@ -50,7 +55,8 @@ class DatabaseSeeder extends Seeder
         $reception = User::updateOrCreate(
             ['email' => 'reception@clinic.com'],
             [
-            'name' => 'Reception User',
+            'first_name' => 'Reception',
+            'last_name' => 'User',
             'role' => 'receptionist',
             'is_active' => true,
             ]
@@ -59,7 +65,8 @@ class DatabaseSeeder extends Seeder
         $receptionTwo = User::updateOrCreate(
             ['email' => 'reception2@clinic.com'],
             [
-            'name' => 'Jennifer Lee',
+            'first_name' => 'Jennifer',
+            'last_name' => 'Lee',
             'role' => 'receptionist',
             'is_active' => true,
             ]

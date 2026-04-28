@@ -2,7 +2,7 @@
     <div class="space-y-5 rounded-2xl bg-[#edf2f9] p-5">
         <div>
             <h1 class="text-[28px] font-semibold leading-tight text-[#172033]">Dashboard</h1>
-            <p class="mt-1 text-sm text-[#4a5f7d]">Welcome back, {{ auth()->user()->name }}</p>
+            <p class="mt-1 text-sm text-[#4a5f7d]">Welcome back, {{ auth()->user()->display_name }}</p>
         </div>
 
         <div class="grid max-w-7xl gap-3 sm:grid-cols-2 xl:grid-cols-4">

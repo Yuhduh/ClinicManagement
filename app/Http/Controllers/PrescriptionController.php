@@ -13,7 +13,7 @@ class PrescriptionController extends Controller
 {
     public function index(): View
     {
-        $prescriptions = Prescription::with('patient:id,first_name,last_name', 'doctor:id,name')
+        $prescriptions = Prescription::with('patient:id,first_name,last_name', 'doctor:id,first_name,last_name,middle_initial')
             ->where('doctor_id', auth()->id())
             ->latest()
             ->paginate(12);

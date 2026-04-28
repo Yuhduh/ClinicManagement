@@ -6,16 +6,30 @@ use App\Http\Requests\StoreUserRequest;
 use App\Http\Requests\UpdateUserRequest;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\View\View;
 
 class UserController extends Controller
 {
-    public function index(): View
+    public function index(Request $request): View
     {
-        $users = User::latest()->paginate(12);
+        $search = $request->input('search', '');
+        
+        $query = User::query();
+        
+        if ($search) {
+            $query->where(function ($q) use ($search) {
+                $q->where('first_name', 'like', "%{$search}%")
+                  ->orWhere('last_name', 'like', "%{$search}%")
+                  ->orWhere('email', 'like', "%{$search}%")
+                  ->orWhere('role', 'like', "%{$search}%");
+            });
+        }
+        
+        $users = $query->latest()->paginate(12)->appends(['search' => $search]);
 
-        return view('admin.users.index', compact('users'));
+        return view('admin.users.index', compact('users', 'search'));
     }
 
     public function create(): View

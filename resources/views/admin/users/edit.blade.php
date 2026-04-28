@@ -5,14 +5,16 @@
         <form method="POST" action="{{ route('users.update', $user) }}" class="mt-5 grid gap-4 md:grid-cols-2">
             @csrf
             @method('PUT')
-            <input type="text" name="name" value="{{ old('name', $user->name) }}" placeholder="Full name" class="rounded-xl border border-[#d7deea] bg-[#f8fbff] px-3 py-2.5 text-[24px] text-[#334155] focus:border-[#8fb4ff] focus:ring-2 focus:ring-[#d9e7ff]" />
-            <input type="email" name="email" value="{{ old('email', $user->email) }}" placeholder="Email" class="rounded-xl border border-[#d7deea] bg-[#f8fbff] px-3 py-2.5 text-[24px] text-[#334155] focus:border-[#8fb4ff] focus:ring-2 focus:ring-[#d9e7ff]" />
-            <select name="role" class="rounded-xl border border-[#d7deea] bg-[#f8fbff] px-3 py-2.5 text-[24px] text-[#334155] focus:border-[#8fb4ff] focus:ring-2 focus:ring-[#d9e7ff]">
+            <input type="text" name="first_name" value="{{ old('first_name', $user->first_name) }}" placeholder="First Name" required class="rounded-xl border border-[#d7deea] bg-[#f8fbff] px-3 py-2.5 text-[24px] text-[#334155] focus:border-[#8fb4ff] focus:ring-2 focus:ring-[#d9e7ff]" />
+            <input type="text" name="last_name" value="{{ old('last_name', $user->last_name) }}" placeholder="Last Name" required class="rounded-xl border border-[#d7deea] bg-[#f8fbff] px-3 py-2.5 text-[24px] text-[#334155] focus:border-[#8fb4ff] focus:ring-2 focus:ring-[#d9e7ff]" />
+            <input type="text" name="middle_initial" value="{{ old('middle_initial', $user->middle_initial) }}" placeholder="Middle Initial" class="rounded-xl border border-[#d7deea] bg-[#f8fbff] px-3 py-2.5 text-[24px] text-[#334155] focus:border-[#8fb4ff] focus:ring-2 focus:ring-[#d9e7ff]" />
+            <input type="email" name="email" value="{{ old('email', $user->email) }}" placeholder="Email" required class="rounded-xl border border-[#d7deea] bg-[#f8fbff] px-3 py-2.5 text-[24px] text-[#334155] focus:border-[#8fb4ff] focus:ring-2 focus:ring-[#d9e7ff]" />
+            <select name="role" required class="rounded-xl border border-[#d7deea] bg-[#f8fbff] px-3 py-2.5 text-[24px] text-[#334155] focus:border-[#8fb4ff] focus:ring-2 focus:ring-[#d9e7ff]">
                 @foreach (['admin', 'doctor', 'receptionist'] as $role)
                     <option value="{{ $role }}" @selected(old('role', $user->role) === $role)>{{ ucfirst($role) }}</option>
                 @endforeach
             </select>
-            <select name="is_active" class="rounded-xl border border-[#d7deea] bg-[#f8fbff] px-3 py-2.5 text-[24px] text-[#334155] focus:border-[#8fb4ff] focus:ring-2 focus:ring-[#d9e7ff]">
+            <select name="is_active" required class="rounded-xl border border-[#d7deea] bg-[#f8fbff] px-3 py-2.5 text-[24px] text-[#334155] focus:border-[#8fb4ff] focus:ring-2 focus:ring-[#d9e7ff]">
                 <option value="1" @selected((string) old('is_active', $user->is_active ? '1' : '0') === '1')>Active</option>
                 <option value="0" @selected((string) old('is_active', $user->is_active ? '1' : '0') === '0')>Inactive</option>
             </select>

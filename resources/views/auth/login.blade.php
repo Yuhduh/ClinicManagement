@@ -1,11 +1,8 @@
 <x-guest-layout>
     <div class="w-full max-w-xl rounded-3xl border border-slate-200 bg-white/95 p-8 shadow-2xl shadow-slate-300/40 backdrop-blur">
         <div class="mb-8 text-center">
-            <div class="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-blue-600 text-white shadow-lg shadow-blue-600/30">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M8 4h8a2 2 0 0 1 2 2v14H6V6a2 2 0 0 1 2-2z" />
-                    <path d="M9 10h6M9 14h6M12 7v6" />
-                </svg>
+            <div class="mx-auto mb-4 flex h-20 w-20 items-center justify-center rounded-3xl bg-sky-50 shadow-lg shadow-sky-200/60 ring-1 ring-sky-100">
+                <x-application-logo class="text-4xl text-sky-600" />
             </div>
             <h1 class="text-4xl font-bold tracking-tight text-slate-900">Clinic Management System</h1>
             <p class="mt-2 text-base text-slate-600">Sign in to manage your clinic operations.</p>

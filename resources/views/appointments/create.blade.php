@@ -31,7 +31,7 @@
                         <select name="doctor_id" class="w-full rounded-xl border border-[#e5e9f1] bg-[#f6f7fb] px-4 py-3 text-sm text-[#6b7280] focus:border-[#2463eb] focus:ring-2 focus:ring-[#d9e7ff]">
                             <option value="">Select doctor</option>
                             @foreach ($doctors as $doctor)
-                                <option value="{{ $doctor->id }}" @selected(old('doctor_id') == $doctor->id)>{{ $doctor->name }}</option>
+                                <option value="{{ $doctor->id }}" @selected(old('doctor_id') == $doctor->id)>{{ $doctor->display_name }}</option>
                             @endforeach
                         </select>
                     </div>

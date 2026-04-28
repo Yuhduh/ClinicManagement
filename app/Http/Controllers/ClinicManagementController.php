@@ -251,7 +251,9 @@ class ClinicManagementController extends Controller
     private function userData(Request $request, ?User $user = null): array
     {
         $validated = $request->validate([
-            'name' => ['required', 'string', 'max:255'],
+            'first_name' => ['required', 'string', 'max:255'],
+            'last_name' => ['required', 'string', 'max:255'],
+            'middle_initial' => ['nullable', 'string', 'max:5'],
             'email' => ['required', 'email', 'max:255', Rule::unique('users', 'email')->ignore($user?->id)],
             'role' => ['required', Rule::in(['admin', 'doctor', 'receptionist'])],
             'is_active' => ['required', 'boolean'],
@@ -259,7 +261,9 @@ class ClinicManagementController extends Controller
         ]);
 
         $data = [
-            'name' => $validated['name'],
+            'first_name' => $validated['first_name'],
+            'last_name' => $validated['last_name'],
+            'middle_initial' => $validated['middle_initial'] ?? null,
             'email' => $validated['email'],
             'role' => $validated['role'],
             'is_active' => (bool) $validated['is_active'],

@@ -28,7 +28,7 @@ class AppointmentController extends Controller
                         ->orWhere('last_name', 'like', "%{$search}%");
                 });
             })
-            ->with(['patient:id,patient_code,first_name,last_name', 'doctor:id,name'])
+            ->with(['patient:id,patient_code,first_name,last_name', 'doctor:id,first_name,last_name,middle_initial'])
             ->latest('scheduled_at');
 
         $appointments = (clone $baseQuery)
@@ -53,7 +53,7 @@ class AppointmentController extends Controller
     {
         return view('appointments.create', [
             'patients' => Patient::orderBy('first_name')->orderBy('last_name')->get(),
-            'doctors' => User::where('role', 'doctor')->orderBy('name')->get(),
+            'doctors' => User::where('role', 'doctor')->orderBy('last_name')->orderBy('first_name')->get(),
         ]);
     }
 
@@ -74,7 +74,7 @@ class AppointmentController extends Controller
         return view('appointments.edit', [
             'appointment' => $appointment,
             'patients' => Patient::orderBy('first_name')->orderBy('last_name')->get(),
-            'doctors' => User::where('role', 'doctor')->orderBy('name')->get(),
+            'doctors' => User::where('role', 'doctor')->orderBy('last_name')->orderBy('first_name')->get(),
         ]);
     }
 

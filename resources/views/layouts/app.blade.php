@@ -10,6 +10,7 @@
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.bunny.net">
         <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
@@ -21,9 +22,7 @@
                     <div class="border-b border-[#dbe3ee] px-4 py-4">
                         <div class="flex items-start gap-2.5">
                             <div class="flex h-9 w-9 items-center justify-center rounded-lg bg-[#2463eb] text-white shadow-sm">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M9 17v-2m3 2v-4m3 4V9M5 20h14a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v14a1 1 0 001 1z" />
-                                </svg>
+                                <x-application-logo class="text-lg" />
                             </div>
                             <div>
                                 <p class="text-[22px] font-semibold leading-6 tracking-tight text-[#111827]">CMS</p>
@@ -74,9 +73,9 @@
 
                     <div class="mt-auto border-t border-[#dbe3ee] p-3">
                         <div class="mb-2.5 flex items-center gap-2.5">
-                            <div class="flex h-9 w-9 items-center justify-center rounded-full bg-[#2463eb] text-xs font-semibold text-white">{{ strtoupper(substr(auth()->user()->name, 0, 2)) }}</div>
+                            <div class="flex h-9 w-9 items-center justify-center rounded-full bg-[#2463eb] text-xs font-semibold text-white">{{ strtoupper(substr(auth()->user()->first_name, 0, 1)) . strtoupper(substr(auth()->user()->last_name ?? '', 0, 1)) }}</div>
                             <div>
-                                <p class="text-sm font-medium text-[#111827]">{{ auth()->user()->name }}</p>
+                                <p class="text-sm font-medium text-[#111827]">{{ auth()->user()->display_name }}</p>
                                 <p class="text-xs capitalize text-[#7184a0]">{{ auth()->user()->role }}</p>
                             </div>
                         </div>
@@ -95,7 +94,7 @@
                             <span class="pointer-events-none absolute inset-y-0 left-3 flex items-center text-[#8aa0bf]">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M21 21l-4.3-4.3m1.8-5.2a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
                             </span>
-                            <input type="text" placeholder="Search patients, appointments..." class="w-full rounded-xl border border-[#d7deea] bg-white py-2 pl-10 pr-3 text-sm text-[#334155] placeholder:text-[#94a3b8] focus:border-[#8fb4ff] focus:ring-2 focus:ring-[#d9e7ff]" />
+                            <input type="text" placeholder="{{ auth()->user()->role === 'admin' ? 'Search users...' : 'Search patients, appointments...' }}" class="w-full rounded-xl border border-[#d7deea] bg-white py-2 pl-10 pr-3 text-sm text-[#334155] placeholder:text-[#94a3b8] focus:border-[#8fb4ff] focus:ring-2 focus:ring-[#d9e7ff]" />
                         </label>
                         <p class="text-sm text-[#4e6483]">{{ now()->format('l, F j, Y') }}</p>
                     </div>
@@ -108,5 +107,38 @@
         @else
             {{ $slot }}
         @endauth
+
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                // Handle confirm delete buttons
+                document.querySelectorAll('[data-confirm-delete]').forEach(button => {
+                    button.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        const modalId = this.getAttribute('data-confirm-modal');
+                        const formId = 'delete-form-' + modalId.split('-').pop();
+                        const form = document.getElementById(formId);
+                        
+                        // Store form for submission
+                        window.pendingFormSubmit = { form: form };
+                        
+                        // Show modal
+                        window.dispatchEvent(new CustomEvent('open-modal', { detail: modalId }));
+                    });
+                });
+
+                // Handle confirm button clicks in modals
+                document.querySelectorAll('[id$="-confirm"]').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        const modalId = this.id.replace('-confirm', '');
+                        
+                        if (window.pendingFormSubmit && window.pendingFormSubmit.form) {
+                            window.pendingFormSubmit.form.submit();
+                        }
+                        
+                        window.dispatchEvent(new CustomEvent('close-modal', { detail: modalId }));
+                    });
+                });
+            });
+        </script>
     </body>
 </html>

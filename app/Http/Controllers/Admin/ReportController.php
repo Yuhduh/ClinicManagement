@@ -43,7 +43,7 @@ class ReportController extends Controller
         $activityRows = User::query()
             ->latest('updated_at')
             ->take(12)
-            ->get(['name', 'email', 'role', 'is_active', 'updated_at']);
+            ->get(['first_name', 'last_name', 'middle_initial', 'email', 'role', 'is_active', 'updated_at']);
 
         return view('admin.reports.index', [
             'filters' => [
@@ -143,13 +143,13 @@ class ReportController extends Controller
                 case 'activity':
                     $users = User::query()
                         ->latest('updated_at')
-                        ->get(['name', 'email', 'role', 'is_active', 'updated_at']);
+                        ->get(['first_name', 'last_name', 'middle_initial', 'email', 'role', 'is_active', 'updated_at']);
 
                     fputcsv($handle, ['User Activity']);
                     fputcsv($handle, ['Name', 'Email', 'Role', 'Status', 'Last Updated']);
                     foreach ($users as $user) {
                         fputcsv($handle, [
-                            $user->name,
+                            $user->display_name,
                             $user->email,
                             Str::title($user->role),
                             $user->is_active ? 'active' : 'inactive',
@@ -200,7 +200,7 @@ class ReportController extends Controller
         $appointmentAnalytics = $this->buildAppointmentAnalytics($startDate, $endDate, $days);
         $activityRows = User::query()
             ->latest('updated_at')
-            ->get(['name', 'email', 'role', 'is_active', 'updated_at']);
+            ->get(['first_name', 'last_name', 'middle_initial', 'email', 'role', 'is_active', 'updated_at']);
 
         $html = view('admin.reports.pdf', [
             'tab' => $tab,

@@ -11,7 +11,7 @@
                     <p class="text-lg font-medium text-[#172033]">{{ $appointment->patient->first_name }} {{ $appointment->patient->last_name }}</p>
                     <span class="text-sm text-[#4a5f7d]">{{ $appointment->scheduled_at->format('h:i A') }}</span>
                 </div>
-                <p class="text-sm text-[#4a5f7d]">Dr. {{ $appointment->doctor->name }} · {{ ucfirst($appointment->status) }}</p>
+                <p class="text-sm text-[#4a5f7d]">Dr. {{ $appointment->doctor->display_name }} · {{ ucfirst($appointment->status) }}</p>
             </div>
         @empty
             <p class="text-sm text-[#4a5f7d]">No appointments in queue.</p>

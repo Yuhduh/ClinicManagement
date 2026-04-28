@@ -260,7 +260,7 @@
                             @forelse ($activityRows as $user)
                                 <tr>
                                     <td class="px-4 py-3">
-                                        <p class="font-medium text-[#172033]">{{ $user->name }}</p>
+                                        <p class="font-medium text-[#172033]">{{ $user->display_name }}</p>
                                         <p class="text-[#4a5f7d]">{{ $user->email }}</p>
                                     </td>
                                     <td class="px-4 py-3 capitalize text-[#4a5f7d]">{{ $user->role }}</td>

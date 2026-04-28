@@ -13,13 +13,13 @@
             </a>
         </div>
 
-        <form method="GET" action="{{ route('appointments.index') }}" class="max-w-lg rounded-2xl border border-[#d8e0eb] bg-white p-3.5">
+        <form method="GET" action="{{ route('appointments.index') }}" class="rounded-2xl border border-[#d8e0eb] bg-white p-3.5">
             <div class="flex items-center gap-3">
                 <label class="relative block flex-1">
                     <span class="pointer-events-none absolute inset-y-0 left-3 flex items-center text-[#8aa0bf]">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M21 21l-4.3-4.3m1.8-5.2a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
                     </span>
-                    <input type="text" name="search" value="{{ $search }}" placeholder="Search appointments..." class="w-full rounded-xl border border-[#d7deea] bg-[#f8fbff] py-2 pl-10 pr-3 text-sm text-[#334155] placeholder:text-[#94a3b8] focus:border-[#8fb4ff] focus:ring-2 focus:ring-[#d9e7ff]" />
+                    <input type="text" name="search" value="{{ $search }}" placeholder="Search appointments..." class="w-full rounded-xl border border-[#d7deea] bg-[#f8fbff] py-2.5 pl-10 pr-3 text-sm text-[#334155] placeholder:text-[#94a3b8] focus:border-[#8fb4ff] focus:ring-2 focus:ring-[#d9e7ff]" />
                 </label>
                 <input type="hidden" name="view" value="{{ $viewMode }}" />
             </div>
@@ -49,16 +49,31 @@
                                     </div>
                                     <div class="min-w-0 flex-1">
                                         <p class="truncate text-base font-semibold text-[#172033]">{{ $appointment->patient->first_name }} {{ $appointment->patient->last_name }}</p>
-                                        <p class="truncate text-sm text-[#4a5f7d]">{{ $appointment->type }} - Dr. {{ $appointment->doctor->name }}</p>
+                                        <p class="truncate text-sm text-[#4a5f7d]">{{ $appointment->type }} - Dr. {{ $appointment->doctor->display_name }}</p>
                                     </div>
                                     <span class="rounded-full px-3 py-1 text-xs font-medium {{ $appointment->status === 'confirmed' ? 'bg-[#dff6ea] text-[#198754]' : ($appointment->status === 'pending' ? 'bg-[#fff4db] text-[#e58a00]' : 'bg-[#fde8e8] text-[#dc3545]') }}">{{ ucfirst($appointment->status) }}</span>
                                     <div class="flex items-center gap-2">
                                         <a href="{{ route('appointments.edit', $appointment) }}" class="rounded-lg border border-[#d7deea] bg-white px-3 py-1.5 text-sm font-medium text-[#4a5f7d] hover:bg-[#f8fbff]">Edit</a>
-                                        <form method="POST" action="{{ route('appointments.destroy', $appointment) }}" onsubmit="return confirm('Delete this appointment?')">
+                                        <button 
+                                            type="button"
+                                            data-confirm-delete 
+                                            data-confirm-modal="delete-appointment-{{ $appointment->id }}"
+                                            data-confirm-message="Are you sure you want to delete this appointment? This action cannot be undone."
+                                            class="rounded-lg border border-[#f5c2c7] bg-[#fde8e8] px-3 py-1.5 text-sm font-medium text-[#dc3545] hover:bg-[#fbd5d9]"
+                                        >
+                                            Delete
+                                        </button>
+                                        <form id="delete-form-{{ $appointment->id }}" method="POST" action="{{ route('appointments.destroy', $appointment) }}" class="hidden">
                                             @csrf
                                             @method('DELETE')
-                                            <button type="submit" class="rounded-lg border border-[#f5c2c7] bg-[#fde8e8] px-3 py-1.5 text-sm font-medium text-[#dc3545] hover:bg-[#fbd5d9]">Delete</button>
                                         </form>
+                                        <x-confirm-modal 
+                                            :id="'delete-appointment-' . $appointment->id"
+                                            title="Delete Appointment"
+                                            message="Are you sure you want to delete this appointment? This action cannot be undone."
+                                            confirmText="Delete"
+                                            cancelText="Cancel"
+                                        />
                                     </div>
                                 </div>
                             @endforeach
@@ -87,7 +102,7 @@
                             @forelse ($appointments as $appointment)
                                 <tr class="odd:bg-white even:bg-[#fbfdff]">
                                     <td class="px-4 py-2.5 text-[#172033]">{{ $appointment->patient->first_name }} {{ $appointment->patient->last_name }}</td>
-                                    <td class="px-4 py-2.5 text-[#4a5f7d]">{{ $appointment->doctor->name }}</td>
+                                    <td class="px-4 py-2.5 text-[#4a5f7d]">{{ $appointment->doctor->display_name }}</td>
                                     <td class="px-4 py-2.5 text-[#4a5f7d]">{{ $appointment->scheduled_at->format('M d, Y h:i A') }}</td>
                                     <td class="px-4 py-2.5">
                                         <span class="rounded-full px-2.5 py-0.5 text-xs font-medium {{ $appointment->status === 'confirmed' ? 'bg-[#dff6ea] text-[#198754]' : ($appointment->status === 'pending' ? 'bg-[#fff4db] text-[#e58a00]' : 'bg-[#fde8e8] text-[#dc3545]') }}">{{ ucfirst($appointment->status) }}</span>
@@ -96,11 +111,26 @@
                                         <div class="flex items-center gap-2">
                                             <a href="{{ route('appointments.edit', $appointment) }}" class="rounded-lg border border-[#d7deea] bg-white px-3 py-1.5 text-sm font-medium text-[#4a5f7d] hover:bg-[#f8fbff]">View</a>
                                             <a href="{{ route('appointments.edit', $appointment) }}" class="rounded-lg border border-[#b8cef8] bg-[#eef4ff] px-3 py-1.5 text-sm font-medium text-[#2463eb] hover:bg-[#e1ebff]">Edit</a>
-                                            <form method="POST" action="{{ route('appointments.destroy', $appointment) }}" onsubmit="return confirm('Delete this appointment?')">
+                                            <button 
+                                                type="button"
+                                                data-confirm-delete 
+                                                data-confirm-modal="delete-appointment-{{ $appointment->id }}"
+                                                data-confirm-message="Are you sure you want to delete this appointment? This action cannot be undone."
+                                                class="rounded-lg border border-[#f5c2c7] bg-[#fde8e8] px-3 py-1.5 text-sm font-medium text-[#dc3545] hover:bg-[#fbd5d9]"
+                                            >
+                                                Delete
+                                            </button>
+                                            <form id="delete-form-{{ $appointment->id }}" method="POST" action="{{ route('appointments.destroy', $appointment) }}" class="hidden">
                                                 @csrf
                                                 @method('DELETE')
-                                                <button type="submit" class="rounded-lg border border-[#f5c2c7] bg-[#fde8e8] px-3 py-1.5 text-sm font-medium text-[#dc3545] hover:bg-[#fbd5d9]">Delete</button>
                                             </form>
+                                            <x-confirm-modal 
+                                                :id="'delete-appointment-' . $appointment->id"
+                                                title="Delete Appointment"
+                                                message="Are you sure you want to delete this appointment? This action cannot be undone."
+                                                confirmText="Delete"
+                                                cancelText="Cancel"
+                                            />
                                         </div>
                                     </td>
                                 </tr>

@@ -17,7 +17,7 @@
             <tbody class="divide-y divide-[#d8e0eb] bg-white">
                 @forelse (($recentUsers ?? collect()) as $user)
                     <tr class="odd:bg-white even:bg-[#fbfdff]">
-                        <td class="px-4 py-2.5 text-[#172033]">{{ $user->name }}</td>
+                        <td class="px-4 py-2.5 text-[#172033]">{{ $user->display_name }}</td>
                         <td class="px-4 py-2.5 text-[#4a5f7d]">{{ $user->email }}</td>
                         <td class="px-4 py-2.5 capitalize text-[#4a5f7d]">{{ $user->role }}</td>
                         <td class="px-4 py-2.5">

@@ -8,6 +8,31 @@
             <a href="{{ route('users.create') }}" class="rounded-lg bg-[#2463eb] px-4 py-2 text-sm font-medium text-white hover:bg-[#1f54c9]">Create User</a>
         </div>
 
+        <!-- Search Form -->
+        <form method="GET" action="{{ route('users.index') }}" class="flex gap-2">
+            <input 
+                type="text" 
+                name="search" 
+                value="{{ $search ?? '' }}" 
+                placeholder="Search by name, email, or role..." 
+                class="flex-1 rounded-lg border border-[#d7deea] bg-[#f8fbff] px-4 py-2 text-[17px] text-[#334155] focus:border-[#8fb4ff] focus:ring-2 focus:ring-[#d9e7ff]"
+            />
+            <button 
+                type="submit" 
+                class="rounded-lg bg-[#2463eb] px-6 py-2 text-sm font-medium text-white hover:bg-[#1f54c9]"
+            >
+                Search
+            </button>
+            @if($search)
+                <a 
+                    href="{{ route('users.index') }}" 
+                    class="rounded-lg border border-[#d7deea] bg-white px-6 py-2 text-sm font-medium text-[#4a5f7d] hover:bg-[#f8fbff]"
+                >
+                    Clear
+                </a>
+            @endif
+        </form>
+
         <div class="overflow-x-auto rounded-2xl border border-[#d8e0eb] bg-white shadow-[0_2px_8px_rgba(15,23,42,0.05)]">
             <table class="min-w-full divide-y divide-[#d8e0eb] text-sm">
                 <thead class="bg-[#f8fbff] text-left text-[#4a5f7d]">
@@ -20,9 +45,9 @@
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-[#d8e0eb] bg-white">
-                    @foreach ($users as $user)
+                    @forelse ($users as $user)
                         <tr class="odd:bg-white even:bg-[#fbfdff]">
-                            <td class="px-4 py-2.5 text-[#172033]">{{ $user->name }}</td>
+                            <td class="px-4 py-2.5 text-[#172033]">{{ $user->display_name }}</td>
                             <td class="px-4 py-2.5 text-[#4a5f7d]">{{ $user->email }}</td>
                             <td class="px-4 py-2.5 capitalize text-[#4a5f7d]">{{ $user->role }}</td>
                             <td class="px-4 py-2.5">
@@ -32,15 +57,35 @@
                                 <div class="flex items-center gap-2">
                                     <a href="{{ route('users.edit', $user) }}" class="rounded-lg border border-[#d7deea] bg-white px-3 py-1.5 text-sm font-medium text-[#4a5f7d] hover:bg-[#f8fbff]">View</a>
                                     <a href="{{ route('users.edit', $user) }}" class="rounded-lg border border-[#b8cef8] bg-[#eef4ff] px-3 py-1.5 text-sm font-medium text-[#2463eb] hover:bg-[#e1ebff]">Edit</a>
-                                    <form method="POST" action="{{ route('users.destroy', $user) }}">
+                                    <button 
+                                        type="button"
+                                        data-confirm-delete 
+                                        data-confirm-modal="delete-user-{{ $user->id }}"
+                                        data-confirm-message="Are you sure you want to delete {{ $user->display_name }}? This action cannot be undone."
+                                        class="rounded-lg border border-[#f5c2c7] bg-[#fde8e8] px-3 py-1.5 text-sm font-medium text-[#dc3545] hover:bg-[#fbd5d9]"
+                                    >
+                                        Delete
+                                    </button>
+                                    <form id="delete-form-{{ $user->id }}" method="POST" action="{{ route('users.destroy', $user) }}" class="hidden">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="submit" class="rounded-lg border border-[#f5c2c7] bg-[#fde8e8] px-3 py-1.5 text-sm font-medium text-[#dc3545] hover:bg-[#fbd5d9]">Delete</button>
                                     </form>
                                 </div>
                             </td>
                         </tr>
-                    @endforeach
+                        <!-- Confirmation Modal for each user -->
+                        <x-confirm-modal 
+                            :id="'delete-user-' . $user->id"
+                            title="Delete User"
+                            :message="'Are you sure you want to delete ' . $user->display_name . '? This action cannot be undone.'"
+                            confirmText="Delete"
+                            cancelText="Cancel"
+                        />
+                    @empty
+                        <tr>
+                            <td colspan="5" class="px-4 py-6 text-center text-[#4a5f7d]">No users found.</td>
+                        </tr>
+                    @endforelse
                 </tbody>
             </table>
         </div>

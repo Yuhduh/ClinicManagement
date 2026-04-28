@@ -30,7 +30,7 @@ class DashboardController extends Controller
 
             return view('dashboard', [
                 'stats' => array_merge($baseStats, $roleStats),
-                'recentUsers' => User::latest()->take(5)->get(['name', 'email', 'role', 'is_active']),
+                'recentUsers' => User::latest()->take(5)->get(['first_name', 'last_name', 'middle_initial', 'email', 'role', 'is_active']),
             ]);
         }
 
@@ -67,7 +67,7 @@ class DashboardController extends Controller
 
         return view('dashboard', [
             'stats' => array_merge($baseStats, $roleStats),
-            'todayQueue' => Appointment::with(['patient:id,first_name,last_name', 'doctor:id,name'])
+            'todayQueue' => Appointment::with(['patient:id,first_name,last_name', 'doctor:id,first_name,last_name,middle_initial'])
                 ->whereDate('scheduled_at', now()->toDateString())
                 ->orderBy('scheduled_at')
                 ->take(8)
